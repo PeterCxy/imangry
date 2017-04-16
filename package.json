@@ -1,0 +1,34 @@
+{
+  "name": "imangry",
+  "version": "1.0.0",
+  "description": "angry.im",
+  "main": "./lib/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf lib && node_modules/.bin/tsc",
+    "start": "node ./lib/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeterCxy/imangry.git"
+  },
+  "author": "PeterCxy",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/PeterCxy/imangry/issues"
+  },
+  "homepage": "https://github.com/PeterCxy/imangry#readme",
+  "devDependencies": {
+    "@types/es6-shim": "^0.31.32",
+    "@types/express": "^4.0.35",
+    "@types/multer": "0.0.33",
+    "@types/node": "^7.0.12",
+    "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "@types/body-parser": "^1.16.3",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "multer": "^1.3.0"
+  }
+}
