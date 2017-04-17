@@ -12,7 +12,7 @@ export module Url {
         app.use(bodyParser.urlencoded({ extended: true }))
         app.post('/p/url', (req, res, next) => {
             let url = req.body['u']
-            if (url != null && url.trim() != "" && isWebUri(url)) {
+            if (url != null && url.trim() != "" && isWebUri(url) && !url.startsWith(`http://${req.host}`) && !url.startsWith(`https://${req.host}`)) {
                 saveFile(URL_DATA, "url", url, (err, u) => {
                     if (err != null) {
                         res.status(500)
