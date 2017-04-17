@@ -2,3 +2,4 @@ node_modules
 lib
 data/*/*
 !data/text/.keep
+!data/url/.keep

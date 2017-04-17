@@ -2,7 +2,7 @@ import * as express from "express"
 import * as fs from "fs"
 import * as path from "path"
 import * as bodyParser from "body-parser"
-import { generateID } from "./util"
+import { saveFile } from "./util"
 
 const TEXT_DATA = path.join(process.cwd(), "./data/text/")
 const URL_TEXT_PREFIX = "/t/"
@@ -12,7 +12,7 @@ export module Text {
         app.post('/p/text', (req, res, next) => {
             let str = req.body
             if (str != null && str.trim() != "") {
-                savePaste(str, (err, u) => {
+                saveFile(TEXT_DATA, "txt", str, (err, u) => {
                     if (err != null) {
                         res.status(500)
                         res.send(err.message)
@@ -22,7 +22,7 @@ export module Text {
                     }
                 })
             } else {
-                res.sendStatus(202)
+                res.sendStatus(204)
             }
         })
         app.get(`${URL_TEXT_PREFIX}:id`, (req, res, next) => {
@@ -37,24 +37,6 @@ export module Text {
                     res.sendStatus(404)
                 }
             })
-        })
-    }
-
-    function savePaste(str: string, callback: (err: Error, u: string) => void) {
-        let id = generateID()
-        let file = `${TEXT_DATA}${id}.txt`
-        fs.exists(file, (exists) => {
-            if (exists) {
-                savePaste(str, callback) // File exists, try again.
-            } else {
-                fs.writeFile(file, str, (err) => {
-                    if (err != null) {
-                        callback(err, null)
-                    } else {
-                        callback(null, id)
-                    }
-                })
-            }
         })
     }
 }
