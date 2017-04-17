@@ -141,7 +141,7 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
 
         function updateSeconds() {
             // Update the seconds
-            $.get("/p/life", function (data) {
+            $.get("/l/life", function (data) {
                 $('#seconds').text(formatTime(parseInt(data)))
             })
         }

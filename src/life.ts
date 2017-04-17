@@ -13,7 +13,7 @@ if (fs.existsSync(LIFE_DATA)) {
 }
 export module Life {
     export function setupRoutes(app: express.Express) {
-        app.get("/p/life", (req, res, next) => {
+        app.get("/l/life", (req, res, next) => {
             res.send("" + LIFE_STATUS.seconds)
         })
         app.post("/p/life", (req, res, next) => {
