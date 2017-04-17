@@ -3,3 +3,4 @@ lib
 data/*/*
 !data/text/.keep
 !data/url/.keep
+!data/life/.keep
