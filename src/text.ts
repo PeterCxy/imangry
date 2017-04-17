@@ -3,9 +3,21 @@ import * as fs from "fs"
 import * as path from "path"
 import * as bodyParser from "body-parser"
 import { saveFile } from "./util"
+import * as useragent from "useragent"
 
+const BROWSER_FAMILIES = [
+    "chrome",
+    "chrome mobile",
+    "msie",
+    "trident",
+    "firefox",
+    "firefox mobile",
+    "safari",
+    "safari mobile"
+]
 const TEXT_DATA = path.join(process.cwd(), "./data/text/")
 const URL_TEXT_PREFIX = "/t/"
+const TEMPLATE = fs.readFileSync(path.join(process.cwd(), "./template/code.html"), "utf-8")
 export module Text {
     export function setupRoutes(app: express.Express) {
         app.use(bodyParser.text())
@@ -30,13 +42,34 @@ export module Text {
             let file = `${TEXT_DATA}${id}.txt`
             fs.exists(file, (exists) => {
                 if (exists) {
-                    // TODO: Return HTML for browser agents
-                    res.setHeader("Content-Type", "text/plain")
-                    res.sendFile(file)
+                    if (BROWSER_FAMILIES.indexOf(useragent.parse(req.headers['user-agent']).family.toLowerCase()) > -1) {
+                        // Browser request. Return a beautiful HTML.
+                        renderHTML(file, (err, html) => {
+                            if (err) {
+                                res.sendStatus(404)
+                            } else {
+                                res.contentType("text/html")
+                                res.send(html)
+                            }
+                        })
+                    } else {
+                        res.setHeader("Content-Type", "text/plain")
+                        res.sendFile(file)
+                    }
                 } else {
                     res.sendStatus(404)
                 }
             })
+        })
+    }
+
+    function renderHTML(file: string, callback: (err: Error, html: string) => void) {
+        fs.readFile(file, "utf-8", (err, content) => {
+            if (err) {
+                callback(err, null)
+            } else {
+                callback(null, TEMPLATE.replace("{{code}}", content))
+            }
         })
     }
 }

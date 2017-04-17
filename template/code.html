@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Angry.Im - Paste</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.css.net/files/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Hightlight.js -->
+    <link href="https://cdn.css.net/files/highlight.js/9.9.0/styles/zenburn.min.css" rel="stylesheet">
+    <style>
+      pre {
+        border-radius: 5px;
+        font-size: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card card-outline-info text-center">
+        <div class="card-block">
+          <pre class="text-left"><code id="code">{{code}}</code></pre>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.css.net/files/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdn.css.net/files/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <!-- Hightlight.js -->
+    <script src="https://cdn.css.net/files/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>
+      var code = ""
+      $(document).ready(function() {
+          code = $("#code").text()
+          var lang = getParameterByName('lang')
+          if (lang != null && lang != "") {
+              toggleLanguage(lang)
+          } else {
+              hljs.initHighlighting()
+          }
+      })
+      function getParameterByName(name, url) {
+          if (!url) {
+              url = window.location.href;
+          }
+          name = name.replace(/[\[\]]/g, "\\$&");
+          var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+      function toggleLanguage(lang) {
+          $('#code').removeClass()
+          $('#code').addClass(lang)
+          $('#code').text(code)
+          // Add language
+          $.getScript('https://cdn.css.net/files/highlight.js/9.9.0/languages/' + lang + '.min.js', function () {
+              hljs.initHighlighting()
+          })
+      }
+    </script>
+  </body>
+</html>
