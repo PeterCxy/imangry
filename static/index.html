@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Angry.Im</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.css.net/files/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Hightlight.js -->
+    <link href="https://cdn.css.net/files/highlight.js/9.9.0/styles/rainbow.min.css" rel="stylesheet">
+    <style>
+      div.glass {
+        text-align: center;
+      }
+      div.life {
+        background-color: #333;
+        border-color: #333;
+        background-image: url('/786px-Moha90.svg.png');
+        text-align: center;
+      }
+      pre {
+        border-radius: 5px;
+      }
+
+      @media (max-width: 768px) {
+        div.glass > img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    </style>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="glass"><img src="/786px-Moha90.svg.png"></img></div>
+      <div class="card card-inverse life">
+        <div class="card-block">
+          <h1 id="seconds" class="card-title">0</h3>
+          <a id="plus1" href="#" class="btn btn-danger">+1s</a>
+          <h3>or</h3>
+          <pre><code class="bash">
+$ curl -X POST 'https://angry.im/p/life'
+          </code></pre>
+        </div>
+      </div>
+      <br/>
+      <div class="card card-outline-info text-center">
+        <div class="card-block">
+            <h3>I'm angry with...</h3>
+            <textarea class="form-control" id="codeArea" rows="3"></textarea><br/>
+            <a id="paste" href="#" class="btn btn-info">Paste</a>
+            <h3>or</h3>
+            <pre><code class="bash">
+$ cat hong-kong-journalist.py | curl -X POST --data-binary -@ 'https://angry.im/p/text'
+            </code></pre>
+            <p>* Tip: Add <code>?=language</code> to the short URL to get highlighting for your pasted code.</p>
+        </div>
+      </div>
+      <br/>
+      <div class="card card-outline-success text-center">
+        <div class="card-block">
+          <h3>I'm angry with...</h3>
+          <input type="url" class="form-control" id="url"></input><br/>
+          <a id="shorten" href="#" class="btn btn-success">Shorten</a>
+          <h3>or</h3>
+          <pre><code class="bash">
+$ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
+          </code></pre>
+        </div>
+      </div>
+    </div>
+    <br/>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://cdn.css.net/files/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://cdn.css.net/files/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <!-- Hightlight.js -->
+    <script src="https://cdn.css.net/files/highlight.js/9.9.0/highlight.min.js"></script>
+    <!--<script src="https://cdn.css.net/files/highlight.js/9.9.0/languages/bash.min.js"></script>-->
+    <script>
+        hljs.initHighlightingOnLoad();
+        $(document).ready(function() {
+            setInterval(updateSeconds, 3000)
+            updateSeconds()
+            $('#plus1').on('click', function (ev) {
+                ev.preventDefault()
+                $.post("/p/life", function (data) {
+                    $('#seconds').text(formatTime(parseInt(data)))
+                })
+            })
+            $('#paste').on('click', function (ev) {
+                ev.preventDefault()
+                var code = $('#codeArea').val().trim()
+                if (code == "") {
+                    return
+                }
+                $('#paste').addClass('disabled')
+                $.ajax('/p/text', {
+                    method: 'POST',
+                    contentType: "text/plain",
+                    data: code,
+                    success: function (data) {
+                        $('#paste').removeClass('disabled')
+                        if (data != null && typeof(data) == "string" && data.trim() != "") {
+                            $('#codeArea').val('')
+                            window.open(data)
+                        }
+                    },
+                    error: function () {
+                        $('#paste').removeClass('disabled')
+                    }
+                })
+            })
+            $('#shorten').on('click', function (ev) {
+                ev.preventDefault()
+                var url = $('#url').val().trim()
+                if (url == "" || url.startsWith("https://" + location.hostname) || url.startsWith("http://" + location.hostname) || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+                    return
+                }
+                $('#shorten').addClass('disabled')
+                $.ajax('/p/url', {
+                    method: 'POST',
+                    contentType: "application/x-www-form-urlencoded",
+                    data: {
+                        u: url
+                    },
+                    success: function (data) {
+                        $('#shorten').removeClass('disabled')
+                        $('#url').val(data)
+                    },
+                    error: function() {
+                        $('#shorten').removeClass('disabled')
+                    }
+                })
+            })
+        })
+
+        function updateSeconds() {
+            // Update the seconds
+            $.get("/p/life", function (data) {
+                $('#seconds').text(formatTime(parseInt(data)))
+            })
+        }
+
+        function formatTime(t) {
+            if (t == 0) return "0s"
+            ret = ""
+            if (t > 60 * 60 * 24 * 30 * 12) {
+                ret += Math.floor(t / (60 * 60 * 24 * 30 * 12)) + "y "
+                t = t % (60 * 60 * 24 * 30 * 12)
+            }
+            
+            if (t > 60 * 60 * 24 * 30) {
+                ret += Math.floor(t / (60 * 60 * 24 * 30)) + "m "
+                t = t % (60 * 60 * 24 * 30)
+            }
+
+            if (t > 60 * 60 * 24) {
+                ret += Math.floor(t / (60 * 60 * 24)) + "d "
+                t = t % (60 * 60 * 24)
+            }
+
+            if (t > 60 * 60) {
+                ret += Math.floor(t / (60 * 60)) + "h "
+                t = t % (60 * 60)
+            }
+
+            if (t > 60) {
+                ret += Math.floor(t / (60)) + "m "
+                t = t % (60)
+            }
+
+            if (t > 0) {
+                ret += Math.floor(t) + "s"
+                t = 0
+            }
+
+            return ret.trim()
+        }
+    </script>
+  </body>
+</html>

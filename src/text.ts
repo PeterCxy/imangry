@@ -11,7 +11,7 @@ export module Text {
         app.use(bodyParser.text())
         app.post('/p/text', (req, res, next) => {
             let str = req.body
-            if (str != null && str.trim() != "") {
+            if (str != null && typeof(str) == "string" && str.trim() != "") {
                 saveFile(TEXT_DATA, "txt", str, (err, u) => {
                     if (err != null) {
                         res.status(500)
