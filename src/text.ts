@@ -13,7 +13,8 @@ const BROWSER_FAMILIES = [
     "firefox",
     "firefox mobile",
     "safari",
-    "safari mobile"
+    "safari mobile",
+    "mobile safari"
 ]
 const TEXT_DATA = path.join(process.cwd(), "./data/text/")
 const URL_TEXT_PREFIX = "/t/"
