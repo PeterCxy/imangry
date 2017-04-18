@@ -56,7 +56,6 @@ $ curl -X POST 'https://angry.im/p/life'
             <pre><code class="bash">
 $ cat hong-kong-journalist.py | curl -X POST --data-binary -@ 'https://angry.im/p/text'
             </code></pre>
-            <p>* Note: Please allow popups from this website to make the pastebin work correctly. We use popups to show the result.</p>
             <p>* Tip: Add <code>?lang=programming_language</code> to the short URL to get highlighting in specific <code>programming_language</code> for your pasted code.</p>
         </div>
       </div>
@@ -74,6 +73,26 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
       </div>
     </div>
     <br/>
+
+
+<div class="modal fade" id="pasteDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pastebin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <a id="pasteResult" target="_blank"></a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdn.css.net/files/jquery/1.12.4/jquery.min.js"></script>
@@ -108,7 +127,9 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
                         $('#paste').removeClass('disabled')
                         if (data != null && typeof(data) == "string" && data.trim() != "") {
                             $('#codeArea').val('')
-                            window.open(data)
+                            $('#pasteResult').attr('href', data)
+                            $('#pasteResult').text(data)
+                            $('#pasteDialog').modal('show')
                         }
                     },
                     error: function () {
