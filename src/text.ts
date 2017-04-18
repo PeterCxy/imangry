@@ -8,10 +8,12 @@ import * as useragent from "useragent"
 const BROWSER_FAMILIES = [
     "chrome",
     "chrome mobile",
+    "chrome mobile ios",
     "msie",
     "trident",
     "firefox",
     "firefox mobile",
+    "firefox mobile ios",
     "safari",
     "safari mobile",
     "mobile safari"
