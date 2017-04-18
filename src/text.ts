@@ -57,7 +57,7 @@ export module Text {
                             }
                         })
                     } else {
-                        res.setHeader("Content-Type", "text/plain")
+                        res.contentType("text/plain")
                         res.sendFile(file)
                     }
                 } else {
