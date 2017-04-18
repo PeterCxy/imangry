@@ -42,6 +42,7 @@ export module Text {
             let file = `${TEXT_DATA}${id}.txt`
             fs.exists(file, (exists) => {
                 if (exists) {
+                    res.charset = "utf-8"
                     if (BROWSER_FAMILIES.indexOf(useragent.parse(req.headers['user-agent']).family.toLowerCase()) > -1) {
                         // Browser request. Return a beautiful HTML.
                         renderHTML(file, (err, html) => {
