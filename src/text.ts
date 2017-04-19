@@ -4,6 +4,7 @@ import * as path from "path"
 import * as bodyParser from "body-parser"
 import { saveFile } from "./util"
 import * as useragent from "useragent"
+import * as escape from "escape-html"
 
 const BROWSER_FAMILIES = [
     "chrome",
@@ -72,7 +73,7 @@ export module Text {
             if (err) {
                 callback(err, null)
             } else {
-                callback(null, TEMPLATE.replace("{{code}}", content))
+                callback(null, TEMPLATE.replace("{{code}}", escape(content)))
             }
         })
     }
