@@ -69,6 +69,7 @@ $ cat hong-kong-journalist.py | curl -X POST --data-binary -@ 'https://angry.im/
           <pre><code class="bash">
 $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
           </code></pre>
+          <p>* Tip: <code>magnet:?xt=</code> and <code>ed2k://</code> links are also supported.</p>
         </div>
       </div>
       <br/>
@@ -150,7 +151,8 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
             $('#shorten').on('click', function (ev) {
                 ev.preventDefault()
                 var url = $('#url').val().trim()
-                if (url == "" || url.startsWith("https://" + location.hostname) || url.startsWith("http://" + location.hostname) || (!url.startsWith('http://') && !url.startsWith('https://'))) {
+                if (url == "" || url.startsWith("https://" + location.hostname) || url.startsWith("http://" + location.hostname)
+                    || (!url.startsWith('http://') && !url.startsWith('https://') && (!url.startsWith('magnet:?xt=') && (!url.startsWith('ed2k://|'))))) {
                     return
                 }
                 $('#shorten').addClass('disabled')

@@ -12,7 +12,9 @@ export module Url {
         app.use(bodyParser.urlencoded({ extended: true }))
         app.post('/p/url', (req, res, next) => {
             let url = req.body['u']
-            if (url != null && url.trim() != "" && isWebUri(url) && !url.startsWith(`http://${req.hostname}`) && !url.startsWith(`https://${req.hostname}`)) {
+            if (url != null && url.trim() != "" && 
+                ((isWebUri(url) && !url.startsWith(`http://${req.hostname}`) && !url.startsWith(`https://${req.hostname}`))
+                || url.startsWith('magnet:?xt=') || url.startsWith('ed2k://|'))) {
                 saveFile(URL_DATA, "url", url, (err, u) => {
                     if (err != null) {
                         res.status(500)
