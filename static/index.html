@@ -10,6 +10,8 @@
     <link href="https://cdn.css.net/files/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
     <!-- Hightlight.js -->
     <link href="https://cdn.css.net/files/highlight.js/9.9.0/styles/rainbow.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdn.css.net/files/animatecss/3.5.2/animate.min.css" rel="stylesheet">
     <style>
       div.glass {
         text-align: center;
@@ -113,6 +115,14 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
     <script src="https://cdn.css.net/files/highlight.js/9.9.0/highlight.min.js"></script>
     <!--<script src="https://cdn.css.net/files/highlight.js/9.9.0/languages/bash.min.js"></script>-->
     <script>
+        $.fn.extend({
+            animateCss: function (animationName) {
+                var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+                this.addClass('animated ' + animationName).one(animationEnd, function() {
+                    $(this).removeClass('animated ' + animationName);
+                });
+            }
+        });
         hljs.initHighlightingOnLoad();
         $(document).ready(function() {
             setInterval(updateSeconds, 3000)
@@ -120,6 +130,8 @@ $ curl -X POST -d 'u=https://example.com' 'https://angry.im/p/url'
             $('#plus1').on('click', function (ev) {
                 ev.preventDefault()
                 $.post("/p/life", function (data) {
+                    $('.glass').animateCss('pulse')
+                    $('#seconds').animateCss('tada')
                     $('#seconds').text(formatTime(parseInt(data)))
                 })
             })
